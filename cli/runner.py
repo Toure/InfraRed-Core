@@ -10,6 +10,10 @@ from cli import ConfigManager
 
 
 class Runner(ConfigManager):
+    """
+    Runner class will serve as an interface to ansible after collecting information from the
+    command line it will launch a given playbook / role.
+    """
     def __init__(self, listtags=False, listtasks=False, listhosts=False, syntax=False, connection='local',
                  module_path=None, forks=100, remote_user='stack', private_key_file=None, ssh_common_args=None,
                  ssh_extra_args=None, sftp_extra_args=None, scp_extra_args=None, become=False, become_method=None,

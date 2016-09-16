@@ -1,0 +1,22 @@
+---
+# InfraRed Configuration file which will contain Plugin locations.
+repos:
+  # Infrared provisioner.
+  provisioning: 'https://github.com/Toure/ir-provision.git'
+
+  # Infrared installer.
+  installer: 'http://localhost/install.git'
+
+  # Infrared tester.
+  tester: 'http://localhost/tester.git'
+
+  # Infrared cleanup.
+  cleanup: 'http://localhost/cleanup.git'
+
+# Infrared plugin install path.
+plugin_path: '/tmp/infrared/plugins'
+
+# Infrared artifact path.
+logging:
+  log_dir: '/tmp/infrared/logs'
+  log_level: 'INFO'

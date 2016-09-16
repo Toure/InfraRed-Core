@@ -1,0 +1,5 @@
+ansible
+gitpython
+PyYAML
+colorlog
+yamlordereddictloader

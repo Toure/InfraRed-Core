@@ -1,14 +1,22 @@
-from cli import ConfigManager
-from cli.logger import make_timestamped_filename
-from cli.logger import glob_logger
-import readline
 import atexit
+import readline
+
+from cli.inspector import ConfigManager
+from core.logger import glob_logger
+from core.logger import make_timestamped_filename
 
 
 class InfraRed(ConfigManager):
     def __init__(self):
         super(InfraRed, self).__init__()
         self.log_dir_path = self.cfg_manager('log_dir')
+
+    def load_parser(self):
+        """
+        Load parser will return parser object to the cli.
+        :return: parser object.
+        """
+        return self.create_parser()
 
     def runner(self):
         """
@@ -29,6 +37,4 @@ class InfraRed(ConfigManager):
 
 if __name__ == "__main__":
     infraread = InfraRed()
-    cfg = ConfigManager()
-    cfg.create_parser()
     atexit.register(infraread.save_results)

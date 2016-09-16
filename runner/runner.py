@@ -6,10 +6,8 @@ from ansible.vars import VariableManager
 from ansible.inventory import Inventory
 from ansible.executor.playbook_executor import PlaybookExecutor
 
-from cli import ConfigManager
 
-
-class Runner(ConfigManager):
+class Runner(object):
     """
     Runner class will serve as an interface to ansible after collecting information from the
     command line it will launch a given playbook / role.
@@ -40,7 +38,7 @@ class Runner(ConfigManager):
         self.check = check
         self.loader = DataLoader()
         self.variable_manger = VariableManager()
-        self.host_list = self.args.inventory
+        self.host_list = host_list
 
     def load_inventory(self):
         """

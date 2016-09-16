@@ -1,8 +1,9 @@
 import logging
 import time
 import os
+import colorlog
 
-from cli import ConfigManager
+from cli.inspector import ConfigManager
 
 
 config = ConfigManager()
@@ -76,7 +77,16 @@ def make_formatter(format_str=""):
     :return:
     """
     if not format_str:
-        format_str = '%(asctime)s :: %(name)-12s : %(levelname)-8s : %(message)s'
+        format_str = colorlog.ColoredFormatter(
+            '%(asctime)s :: %(name)-12s : %(levelname)-8s : %(message)s',
+            log_colors=dict(
+                DEBUG='blue',
+                INFO='green',
+                WARNING='yellow',
+                ERROR='red',
+                CRITICAL='bold_red,bg_white',
+            )
+        )
 
     return logging.Formatter(format_str)
 

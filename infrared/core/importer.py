@@ -1,20 +1,19 @@
 from git import Repo
-from core.exceptions import IRException
-from cli.inspector import ConfigManager
+
+from infrared.cli.inspector import ConfigManager
+from infrared.core.exceptions import IRException
+configmanger = ConfigManager()
+PLUGIN_PATH = configmanger.lookup('plugin_path')
 
 
-class Importer(ConfigManager):
-    def __init__(self):
-        super(Importer, self).__init__()
-        self.local_repo_path = self.cfg_manager('plugin_path')
-
+class Importer(object):
     def clone_repo(self, repo_url):
         """
         Clone repo will perform the equivalent of git clone <url_of_repo>/repo.git.
         :return: None
         """
         try:
-            Repo.clone_from(repo_url, self.local_repo_path)
+            Repo.clone_from(repo_url, PLUGIN_PATH)
         except IRException:
             print("Could not retrieve the follow plugin: {}".format(repo_url))
 
@@ -27,6 +26,7 @@ class Importer(ConfigManager):
         # TODO write a yaml linter.
         pass
 
+    @classmethod
     def search_repos(self, repo_name, repo_url):
         """
         Search local and remote for repo_name.

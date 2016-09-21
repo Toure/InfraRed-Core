@@ -3,10 +3,10 @@ import time
 import os
 import colorlog
 
-from infrared.cli.inspector import ConfigManager
+from infrared.cli.inspector import SpecManager
 
 
-config = ConfigManager()
+config = SpecManager()
 
 
 def make_timestamp():

@@ -2,4 +2,4 @@ ansible
 gitpython
 PyYAML
 colorlog
-yamlordereddictloader
+click

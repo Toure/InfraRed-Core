@@ -2,19 +2,19 @@ import atexit
 import readline
 
 # TODO figure out another namespace option for CLI
-from cli.core_args import Cli
+from cli.core_args import cmd
 #
 #
-from cli.inspector import ConfigManager
+from cli.inspector import SpecManager
 from core.logger import glob_logger
 from core.logger import make_timestamped_filename
 
-configmanager = ConfigManager()
+specmanager = SpecManager()
 
 
 class InfraRed(object):
     def __init__(self):
-        self.log_dir = configmanager.lookup('log_dir')
+        self.log_dir = specmanager.lookup('log_dir')
 
     def save_results(self):
         """
@@ -28,6 +28,7 @@ class InfraRed(object):
 
 def main():
     infrared = InfraRed()
+    cmd()
     atexit.register(infrared.save_results)
 
 

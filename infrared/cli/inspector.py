@@ -6,7 +6,7 @@ CURRENT_DIR = os.path.dirname(__file__)
 CONF = os.path.join(CURRENT_DIR, "../configs/infrared_base_config.yaml")
 
 
-class ConfigManager(object):
+class SpecManager(object):
     def lookup(self, key, collection=CONF):
         """
         Config manager will search configurations file for a given key and return

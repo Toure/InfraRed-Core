@@ -1,47 +1,43 @@
-import click
+import clg
+import os
+import yaml
+import yamlordereddictloader
+
+from configmanager import lookup
+from configmanager import CURRENT_DIR
+
+CORE_ARGS_FILE = os.path.join(CURRENT_DIR, "../configs/core_args.yml")
 
 
-@click.group()
-def cmd():
-    """
-    Infrared Command line interface.
-    :return:
-    """
-    pass
-
-@click.command()
-@click.option('--exec')
-def runner():
-    """
-    Execute given command from cli.
-    :return:
-    """
-    pass
-
-@click.command()
-@click.option('--install_plugins')
-@click.argument('plugin_name')
 def install_plugin(plugin_name):
     """
      Install plugin.
     :return: parser object
     """
-    click.echo('Installing plugins: {}'.format(plugin_name))
+    print("{}".format(plugin_name))
 
-@click.command()
-@click.option('--list-plugins')
-def list_plugins(key=None, repo_path=None):
+
+def install_all_plugins():
+    """
+    Install all available plugins.
+    :return:
+    """
+    pass
+
+
+def list_plugins(value, key=None, repo_path=None):
     """
     List plugins will display all available core plugins.
     :return:
     """
+
     plugin_list = None
 
     if repo_path is None:
-        plugin_list = self.lookup('repos')
+        plugin_list = lookup('repos')
     else:
         try:
-            plugin_list = self.lookup(key, repo_path)
+            plugin_list = lookup(key, repo_path)
         except ValueError:
             print("Could not find given plugin: {}".format(key))
 
@@ -49,9 +45,8 @@ def list_plugins(key=None, repo_path=None):
     for k, _ in plugin_list.items():
         print(k)
 
-@click.command()
-@click.option('--list-all-plugins')
-def list_installed_plugins(plugin_path=None):
+
+def list_installed_plugins(value):
     """
     List locally installed plugins which will have precidence over
     list_plugin method.
@@ -60,8 +55,7 @@ def list_installed_plugins(plugin_path=None):
     """
     pass
 
-@click.command()
-@click.option('--remove')
+
 def remove_plugin():
     """
     Remove or uninstall given plugin by name.
@@ -69,7 +63,19 @@ def remove_plugin():
     """
     pass
 
-command_list = [runner, install_plugin, list_plugins, list_installed_plugins, remove_plugin]
+clg.TYPES.update({
+    'install': install_plugin,
+    'install_all': install_all_plugins,
+    'list': list_plugins,
+    'list_installed': list_installed_plugins,
+    'remove': remove_plugin,
+})
 
-for cmd_element in command_list:
-    cmd.add_command(cmd_element)
+
+def main():
+    cmd = clg.CommandLine(yaml.load(open(CORE_ARGS_FILE),
+                                    Loader=yamlordereddictloader.Loader))
+    return cmd.parse()
+
+if __name__ == '__main__':
+    main()

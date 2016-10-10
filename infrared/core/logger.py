@@ -3,10 +3,7 @@ import time
 import os
 import colorlog
 
-from infrared.cli.inspector import SpecManager
-
-
-config = SpecManager()
+from infrared.cli.configmanager import lookup
 
 
 def make_timestamp():
@@ -122,7 +119,7 @@ def _glob_logger(log_dir=None):
     :return:
     """
     if log_dir is None:
-        log_dir = config.lookup("log_dir")
+        log_dir = lookup("log_dir")
 
     if not os.path.exists(log_dir):
         os.makedirs(log_dir)

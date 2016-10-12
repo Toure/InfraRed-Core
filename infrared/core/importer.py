@@ -43,6 +43,7 @@ def activate_repo(repo_name):
     """
     pass
 
+
 def deactivate_repo(self, repo_name):
     """
     Deactivate repo will be called to update the status of available
@@ -51,6 +52,7 @@ def deactivate_repo(self, repo_name):
     :return:
     """
     pass
+
 
 def remove_repo(self, plugin_name):
     """

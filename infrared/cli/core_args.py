@@ -1,12 +1,4 @@
-import clg
-import os
-import yaml
-import yamlordereddictloader
-
 from configmanager import lookup
-from configmanager import CURRENT_DIR
-
-CORE_ARGS_FILE = os.path.join(CURRENT_DIR, "../configs/core_args.yml")
 
 
 def install_plugin(plugin_name):
@@ -62,20 +54,3 @@ def remove_plugin():
     :return:
     """
     pass
-
-clg.TYPES.update({
-    'install': install_plugin,
-    'install_all': install_all_plugins,
-    'list': list_plugins,
-    'list_installed': list_installed_plugins,
-    'remove': remove_plugin,
-})
-
-
-def main():
-    cmd = clg.CommandLine(yaml.load(open(CORE_ARGS_FILE),
-                                    Loader=yamlordereddictloader.Loader))
-    return cmd.parse()
-
-if __name__ == '__main__':
-    main()

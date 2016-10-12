@@ -1,35 +1,21 @@
-import atexit
-import readline
+import clg
 
-# TODO figure out another namespace option for CLI
-from cli.core_args import cmd
-#
-#
-from cli.configmanager import lookup
-from core.logger import glob_logger
-from core.logger import make_timestamped_filename
+from infrared.cli import core_args
+from infrared.configs import yaml_conf
+
+ordered_dict = yaml_conf("infrared/configs/core_args.yml")
 
 
-class InfraRed(object):
-    def __init__(self):
-        self.log_dir = lookup('log_dir')
-
-    def save_results(self):
-        """
-        Write output to log files.
-        :return: timestamped log file.
-        """
-        glob_logger.info("Saving History...")
-        log_path = self.log_dir + make_timestamped_filename('iridium_cli_history')
-        readline.write_history_file(log_path)
+clg.TYPES.update({function_name: function
+                  for function_name, function in vars(core_args).items()
+                  if not function_name.startswith('_')}
+                 )
 
 
 def main():
-    infrared = InfraRed()
-    cmd()
-    atexit.register(infrared.save_results)
+    cmd = clg.CommandLine(ordered_dict)
+    return cmd.parse()
 
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     import sys
-    sys.exit(int(main() or 0))
+    sys.exit(main())

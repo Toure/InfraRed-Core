@@ -37,7 +37,7 @@ subparsers:
               options:
                 install:
                     short: i
-                    type: val
+                    type: str
                     metavar: PLUGIN_NAME
                     help: Install given plugin.
                 install_all:

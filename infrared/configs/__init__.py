@@ -1,12 +1,32 @@
 import yaml
 import yamlordereddictloader
+from collections import OrderedDict
+import os
+
+CURRENT_DIR = os.path.dirname(__file__)
 
 
-def yaml_conf(config_name):
+def yaml_merge(files):
+    def merge(dict1, dict2):
+        for key, value in dict2.items():
+            if key not in dict1:
+                dict1[key] = value
+            elif isinstance(value, OrderedDict):
+                merge(dict1[key], value)
+
+    config = yaml.load(open(files.pop(0)), Loader=yamlordereddictloader.Loader)
+    while files:
+        merge(config, yaml.load(open(files.pop(0)), Loader=yamlordereddictloader.Loader))
+    return config
+
+
+def yaml_list():
     """
-    yaml_conf will transform a given yaml file into an ordered dictionary.
-    :param config_name: yaml file name to convert.
-    :return: ordereddict
+    Yaml list will search current directory and return a list.
+    :return:
     """
-    ordered_conf = yaml.load(open(config_name), Loader=yamlordereddictloader.Loader)
-    return ordered_conf
+    files = [os.path.abspath(filename)
+             for filename in os.listdir(CURRENT_DIR)
+             if os.path.splitext(filename)[-1] in ('.yml', '.yaml')]
+    return files
+

@@ -2,10 +2,10 @@
 # InfraRed Configuration file which will contain Plugin locations.
 repos:
   # Infrared provisioner.
-  provisioning: 'https://github.com/Toure/ir-provision.git'
+  provisioning: 'https://github.com/rhos-infra/ir-provision.git'
 
   # Infrared installer.
-  installer: 'http://localhost/install.git'
+  installer: 'https://github.com/rhos-infra/ir-installer.git'
 
   # Infrared tester.
   tester: 'http://localhost/tester.git'

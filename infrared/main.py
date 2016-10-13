@@ -1,9 +1,11 @@
 import clg
 
 from infrared.cli import core_args
-from infrared.configs import yaml_conf
+from infrared.configs import yaml_list
+from infrared.configs import yaml_merge
 
-ordered_dict = yaml_conf("infrared/configs/core_args.yml")
+
+combined_conf = yaml_merge(yaml_list())
 
 
 clg.TYPES.update({function_name: function
@@ -13,7 +15,7 @@ clg.TYPES.update({function_name: function
 
 
 def main():
-    cmd = clg.CommandLine(ordered_dict)
+    cmd = clg.CommandLine(combined_conf)
     return cmd.parse()
 
 if __name__ == '__main__':

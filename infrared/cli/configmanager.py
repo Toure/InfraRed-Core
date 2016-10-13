@@ -2,7 +2,7 @@ import os
 import yaml
 
 CURRENT_DIR = os.path.dirname(__file__)
-CONF = os.path.join(CURRENT_DIR, "../configs/infrared_base_config.yaml")
+CONF = os.path.join(CURRENT_DIR, "infrared_base_config.yaml")
 
 
 def lookup(key, collection=CONF):

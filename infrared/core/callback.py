@@ -185,7 +185,7 @@ class CallbackModule(CallbackBase):
     def record_logs(self, user_id, success=False):
         """
         Special callback added to this callback plugin
-        Called by Runner objet
+        Called by Runner object
         :param user_id:
         :return:
         """

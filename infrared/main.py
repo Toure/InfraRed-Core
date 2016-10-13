@@ -7,11 +7,9 @@ from infrared.configs import yaml_merge
 
 combined_conf = yaml_merge(yaml_list())
 
-
 clg.TYPES.update({function_name: function
                   for function_name, function in vars(core_args).items()
-                  if not function_name.startswith('_')}
-                 )
+                  if not function_name.startswith('_')})
 
 
 def main():

@@ -27,6 +27,6 @@ def yaml_list():
     """
     files = [os.path.abspath(filename)
              for filename in os.listdir(CURRENT_DIR)
-             if os.path.splitext(filename)[-1] in ('.yml', '.yaml')]
+             if os.path.splitext(filename)[-1] in ('.spc', '.spec')]
     return files
 

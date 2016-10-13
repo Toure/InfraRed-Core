@@ -1,4 +1,4 @@
-from configmanager import lookup
+from infrared.core.configmanager import lookup
 
 
 def install_plugin(plugin_name):

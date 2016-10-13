@@ -1,6 +1,7 @@
 from git import Repo
 
 from infrared.core.exceptions import IRException
+from infrared.core.logger import LOG
 
 
 def clone_repo(repo_url, plugin_path):
@@ -11,7 +12,7 @@ def clone_repo(repo_url, plugin_path):
     try:
         Repo.clone_from(repo_url, plugin_path)
     except IRException:
-        print("Could not retrieve the follow plugin: {}".format(repo_url))
+        LOG.debug("Could not retrieve the follow plugin: {}".format(repo_url))
 
 
 def validate_repo(repo_name):

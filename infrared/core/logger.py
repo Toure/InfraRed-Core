@@ -1,131 +1,56 @@
+
 import logging
-import time
-import os
+import sys
+import traceback
+
 import colorlog
 
-from infrared.cli.configmanager import lookup
+from infrared.core import exceptions
+
+logger_formatter = colorlog.ColoredFormatter(
+    "%(log_color)s%(levelname)-8s%(message)s",
+    log_colors=dict(
+        DEBUG='blue',
+        INFO='green',
+        WARNING='yellow',
+        ERROR='red',
+        CRITICAL='bold_red,bg_white',
+    )
+)
+
+LOGGER_NAME = "IRLogger"
+DEFAULT_LOG_LEVEL = logging.WARNING
+
+LOG = logging.getLogger(LOGGER_NAME)
+LOG.setLevel(DEFAULT_LOG_LEVEL)
+
+# Create stream handler with debug level
+sh = logging.StreamHandler()
+sh.setLevel(logging.DEBUG)
+
+# Add the logger_formatter to sh
+sh.setFormatter(logger_formatter)
+
+# Create logger and add handler to it
+LOG.addHandler(sh)
 
 
-def make_timestamp():
+def ir_excepthook(exc_type, exc_value, exc_traceback):
     """
-    Returns the localtime year-month-day-hr-min-sec as a string
-    """
-    timevals = time.localtime()[:-3]
-    ts = "-".join(str(x) for x in timevals)
-    return ts
-
-
-def make_timestamped_filename(prefix, postfix=".log"):
-    """
-    Returns a string containing prefix-timestamp-postfix
-    """
-    fname = prefix + "-" + make_timestamp() + postfix
-    return fname
-
-
-def make_logger(loggername, handlers=(), loglevel=logging.DEBUG):
-    """
-
-    :param loggername:
-    :param handlers:
-    :param loglevel:
-    :return:
-    """
-    logr = logging.getLogger(loggername)
-    logr.setLevel(loglevel)
-
-    for hdlr in handlers:
-        logr.addHandler(hdlr)
-
-    return logr
-
-
-def make_stream_handler(fmt, loglevel=logging.INFO):
+    exception hook that sends IRException to log and other exceptions to
+    stderr (default excepthook)
     """
 
-    :param fmt:
-    :param loglevel:
-    :return:
-    """
-    strm_handler = logging.StreamHandler()
-    strm_handler.setLevel(loglevel)
-    strm_handler.setFormatter(fmt)
-    return strm_handler
+    # sends full exception with trace to log
+    if not isinstance(exc_value, exceptions.IRException):
+        return sys.__excepthook__(exc_type, exc_value, exc_traceback)
+
+    if LOG.getEffectiveLevel() <= logging.DEBUG:
+        formated_exception = "".join(
+            traceback.format_exception(exc_type, exc_value, exc_traceback))
+        LOG.error(formated_exception + exc_value.message)
+    else:
+        LOG.error(exc_value.message)
 
 
-def make_file_handler(fmt, filename, loglevel=logging.DEBUG):
-    """
-
-    :param fmt:
-    :param filename:
-    :param loglevel:
-    :return:
-    """
-    file_handler = logging.FileHandler(filename)
-    file_handler.setFormatter(fmt)
-    file_handler.setLevel(loglevel)
-    return file_handler
-
-
-def make_formatter(format_str=""):
-    """
-
-    :param format_str:
-    :return:
-    """
-    if not format_str:
-        # format_str = colorlog.ColoredFormatter(
-        format_str = '%(asctime)s :: %(name)-12s : %(levelname)-8s : %(message)s'
-        #     log_colors=dict(
-        #         DEBUG='blue',
-        #         INFO='green',
-        #         WARNING='yellow',
-        #         ERROR='red',
-        #         CRITICAL='bold_red,bg_white',
-        #     )
-        # )
-
-    return logging.Formatter(format_str)
-
-
-def get_simple_logger(logname, filename, loglvl=logging.DEBUG):
-    """
-    Simple wrapper around the other functions to create a basic logger.  This is
-    useful as a module level debugger
-
-    :param logname: (str) a name to give to the logger object
-    :param filename: (str) the full path of where the log file will be written (defaults to current dir)
-    :param loglvl: (int) a logging loglevel
-    """
-    # Do the stream handler and formatter
-    stream_fmt = make_formatter()
-    sh = make_stream_handler(stream_fmt)
-
-    # Make the filename, file handler and formatter
-    fname = make_timestamped_filename(filename, ".log")
-    file_fmt = make_formatter()
-    fh = make_file_handler(file_fmt, fname)
-
-    # get the actual logger
-    logr = make_logger(logname, (sh, fh))
-    logr.setLevel(loglvl)
-    return logr
-
-
-def _glob_logger(log_dir=None):
-    """
-
-    :param log_dir:
-    :return:
-    """
-    if log_dir is None:
-        log_dir = lookup("log_dir")
-
-    if not os.path.exists(log_dir):
-        os.makedirs(log_dir)
-
-    log_name = os.path.join(log_dir, "infrared")
-    return log_name
-
-
-glob_logger = get_simple_logger(__name__, _glob_logger())
+sys.excepthook = ir_excepthook

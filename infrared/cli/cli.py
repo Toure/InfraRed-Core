@@ -1,4 +1,6 @@
 from infrared.core.configmanager import lookup
+from infrared.core import exceptions
+from infrared.core.logger import LOG
 
 
 def install_plugin(plugin_name):
@@ -30,10 +32,10 @@ def list_plugins(value, key=None, repo_path=None):
     else:
         try:
             plugin_list = lookup(key, repo_path)
-        except ValueError:
-            print("Could not find given plugin: {}".format(key))
+        except exceptions.IRFileNotFoundException:
+            LOG.debug("Could not find given plugin: {}".format(key))
 
-    print("Available plugin for install:")
+    LOG.info("Available plugin for install:")
     for k, _ in plugin_list.items():
         print(k)
 

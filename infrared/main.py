@@ -5,7 +5,7 @@ from infrared.configs import yaml_list
 from infrared.configs import yaml_merge
 
 # Merge all spec file which were installed.
-combined_conf = yaml_merge(yaml_list())
+COMBINED_CONF = yaml_merge(yaml_list())
 
 # Collect all functions which will correspond to the cli args.
 clg.TYPES.update({function_name: function
@@ -14,7 +14,7 @@ clg.TYPES.update({function_name: function
 
 
 def main():
-    cmd = clg.CommandLine(combined_conf)
+    cmd = clg.CommandLine(COMBINED_CONF)
     return cmd.parse()
 
 if __name__ == '__main__':

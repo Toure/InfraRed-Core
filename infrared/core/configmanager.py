@@ -46,3 +46,13 @@ def _dump_config(config_obj):
             return yaml.load(stream)
         except yaml.YAMLError as ye:
             print(ye)
+
+
+def check_environment_vars():
+    """
+    Check Environment Vars will search for relative defined varibles which
+    belong to a set table and return those pairs to ansible as extra / external
+    variables.
+    :return:
+    """
+    pass

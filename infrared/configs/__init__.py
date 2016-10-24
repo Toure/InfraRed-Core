@@ -25,8 +25,7 @@ def yaml_list():
     Yaml list will search current directory and return a list.
     :return:
     """
-    files = [os.path.abspath(filename)
+    files = [os.path.normpath(os.path.join(CURRENT_DIR, filename))
              for filename in os.listdir(CURRENT_DIR)
              if os.path.splitext(filename)[-1] in ('.spc', '.spec')]
     return files
-
